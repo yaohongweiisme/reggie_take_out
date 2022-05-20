@@ -46,8 +46,8 @@ public class MailUtil implements Runnable {
             // 2.3设置邮件主题
             message.setSubject("登陆验证码");
             // 2.4设置邮件内容
-            String content = "<html><head></head><body><h1>这是一封登录验证码激活邮件,登录请输入以下验证码</h1><h3>你的验证码是:" + code
-                    + "请妥善保管</h3></body></html>";
+            String content = "<html><head></head><body><h1>这是你的登录验证码:</h1><h3>" + code
+                    + "有效期10分钟,请妥善保管</h3></body></html>";
             message.setContent(content, "text/html;charset=UTF-8");
             // 3.发送邮件
             Transport.send(message);

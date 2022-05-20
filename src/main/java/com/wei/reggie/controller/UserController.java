@@ -8,6 +8,7 @@ import com.wei.reggie.util.MailUtil;
 import com.wei.reggie.util.ValidateCodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RestController
@@ -23,14 +25,18 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @PostMapping("/sendMsg")
-    public R<String> sendMsg(@RequestBody User user, HttpSession session){
+    public R<String> sendMsg(@RequestBody User user){
         String email=user.getEmail();
         if(StringUtils.hasText(email)){
             String code= ValidateCodeUtils.generateValidateCode(6).toString();
             log.info("验证码为:{}",code);
-            session.setAttribute("emailCode",code);
+            //将验证码缓存到redis中设置有效期5分钟
+            redisTemplate.opsForValue().set(email,code,10, TimeUnit.MINUTES);
+//            session.setAttribute("emailCode",code);
             new MailUtil(user.getEmail(),code).run();
             return R.success("发送验证码成功");
         }
@@ -41,9 +47,10 @@ public class UserController {
     public R<User> login(@RequestBody Map map, HttpSession session){
         String email=map.get("email").toString();
         String code=map.get("code").toString();
-        Object codeInSession=session.getAttribute("emailCode");
+//        Object codeInSession=session.getAttribute("emailCode");
+        Object codeInRedis = redisTemplate.opsForValue().get(email);
         User user;
-        if(codeInSession!=null&&codeInSession.equals(code)){
+        if(codeInRedis!=null&&codeInRedis.equals(code)){
             LambdaQueryWrapper<User> queryWrapper=new LambdaQueryWrapper<>();
             queryWrapper.eq(User::getEmail,email);
             user = userService.getOne(queryWrapper);
@@ -53,6 +60,7 @@ public class UserController {
                 userService.save(user);
             }
             session.setAttribute("user",user.getId());
+            redisTemplate.delete(email);
             return R.success(user);
         }
         return R.error("短信发送失败");

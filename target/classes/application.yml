@@ -13,7 +13,7 @@ spring:
   redis:
     host: 192.2.31.3
     port: 6379
-    password: root@motodroid4
+    password: motodroid4
     database: 0
 
 mybatis-plus:
