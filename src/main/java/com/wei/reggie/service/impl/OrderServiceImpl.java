@@ -50,7 +50,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
         }
         long orderId = IdWorker.getId();
         AtomicInteger amount = new AtomicInteger(0);
-
+        Integer count=0;
         //整合订单明细数据
         List<OrderDetail> orderDetails = shoppingCarts.stream().map((item) -> {
             OrderDetail orderDetail=new OrderDetail();
@@ -72,7 +72,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
         orders.setStatus(2);
         orders.setAmount(new BigDecimal(amount.get()));//总金额
         orders.setUserId(userId);
-        orders.setNumber(String.valueOf(orderId));
+        for (OrderDetail orderDetail : orderDetails) {
+            count+=orderDetail.getNumber();
+        }
+        orders.setNumber(count);
+        log.error("订单物品总数量："+count);
         orders.setUserName(user.getName());
         orders.setConsignee(addressBook.getConsignee());
         orders.setPhone(addressBook.getPhone());

@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 public class Orders implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    //订单号
     private Long id;
 
-    //订单号
-    private String number;
+    //订单物品数量
+    private Integer number;
 
     //订单状态 1待付款，2待派送，3已派送，4已完成，5已取消
     private Integer status;
