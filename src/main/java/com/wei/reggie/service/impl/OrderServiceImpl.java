@@ -50,7 +50,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
         }
         long orderId = IdWorker.getId();
         AtomicInteger amount = new AtomicInteger(0);
-
+        Integer number=0;
         //整合订单明细数据
         List<OrderDetail> orderDetails = shoppingCarts.stream().map((item) -> {
             OrderDetail orderDetail=new OrderDetail();
@@ -65,14 +65,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implement
             amount.addAndGet(item.getAmount().multiply(new BigDecimal(item.getNumber())).intValue());
             return orderDetail;
         }).collect(Collectors.toList());
-
+        for (OrderDetail orderDetail : orderDetails) {
+            number+=orderDetail.getNumber();
+        }
         orders.setId(orderId);
         orders.setOrderTime(LocalDateTime.now());
         orders.setCheckoutTime(LocalDateTime.now());
         orders.setStatus(2);
         orders.setAmount(new BigDecimal(amount.get()));//总金额
         orders.setUserId(userId);
-        orders.setNumber(String.valueOf(orderId));
+        orders.setNumber(number);
         orders.setUserName(user.getName());
         orders.setConsignee(addressBook.getConsignee());
         orders.setPhone(addressBook.getPhone());

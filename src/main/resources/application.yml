@@ -11,7 +11,7 @@ spring:
         username: root
         password: motodroid4
   redis:
-    host: 192.2.31.3
+    host: 49.235.85.30
     port: 6379
     password: motodroid4
     database: 0
