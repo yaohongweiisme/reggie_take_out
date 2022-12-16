@@ -1,5 +1,5 @@
 server:
-  port: 8848
+  port: 8048
 
 spring:
   application:
@@ -7,9 +7,9 @@ spring:
   datasource:
       druid:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+        url: jdbc:mysql://192.168.149.3:3306/web_reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
         username: root
-        password: motodroid4
+        password: root
 
 mybatis-plus:
   configuration:
@@ -21,4 +21,4 @@ mybatis-plus:
       id-type: ASSIGN_ID
 
 reggie:
-  path: D:\\服务器文件\\测试\\
+  path: C:\\Users\\Wei\Documents\\微信文件\\WeChat Files\\wxid_sa7amvjun0dl21\\FileStorage\\File\\2022-12\\资料\\图片资源\\

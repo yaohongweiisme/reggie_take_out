@@ -30,7 +30,7 @@ public class CommonController {
         String originFileName=file.getOriginalFilename();
         //截取原来图片的后缀名
         String suffix=originFileName.substring(originFileName.lastIndexOf("."));
-        String randomFileName= UUID.randomUUID().toString()+suffix;
+        String randomFileName= UUID.randomUUID() +suffix;
         //判断配置文件声明的目录在电脑里是否存在
         File dir=new File(basePath);
         if(!dir.exists()){

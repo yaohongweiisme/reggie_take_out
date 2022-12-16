@@ -55,7 +55,7 @@ public class UserController {
             session.setAttribute("user",user.getId());
             return R.success(user);
         }
-        return R.error("短信发送失败");
+        return R.error("登录失败");
 
     }
 
