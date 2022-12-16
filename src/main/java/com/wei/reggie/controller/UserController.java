@@ -48,7 +48,7 @@ public class UserController {
         String email=map.get("email").toString();
         String code=map.get("code").toString();
 //        Object codeInSession=session.getAttribute("emailCode");
-        Object codeInRedis = redisTemplate.opsForValue().get(email);
+        String codeInRedis = (String) redisTemplate.opsForValue().get(email);
         User user;
         if(codeInRedis!=null&&codeInRedis.equals(code)){
             LambdaQueryWrapper<User> queryWrapper=new LambdaQueryWrapper<>();
